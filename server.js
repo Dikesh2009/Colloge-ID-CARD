@@ -7,13 +7,13 @@ const QRCode = require("qrcode");
 
 const app = express();
 
-// ✅ middleware
+// middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// ✅ IMPORTANT ROOT FIX
+// ✅ ROOT FIX (IMPORTANT)
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 let users = [];
 let otpStore = {};
 
-// 📸 Upload setup
+// upload
 const storage = multer.diskStorage({
   destination: "./public/uploads",
   filename: (req, file, cb) => {
@@ -30,7 +30,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// 📩 SEND OTP
+// OTP
 app.post("/send-otp", async (req, res) => {
   const { email } = req.body;
 
@@ -48,14 +48,14 @@ app.post("/send-otp", async (req, res) => {
   await transporter.sendMail({
     from: process.env.EMAIL,
     to: email,
-    subject: "OTP Verification",
+    subject: "OTP",
     text: `Your OTP is ${otp}`
   });
 
   res.json({ msg: "OTP Sent" });
 });
 
-// ✅ VERIFY OTP
+// verify
 app.post("/verify-otp", (req, res) => {
   const { email, otp } = req.body;
 
@@ -66,9 +66,9 @@ app.post("/verify-otp", (req, res) => {
   }
 });
 
-// 🚫 SAVE + QR
+// submit
 app.post("/submit", upload.single("photo"), (req, res) => {
-  const { enrollment, mobile, email, name, address } = req.body;
+  const { name, enrollment, mobile, email, address } = req.body;
 
   let exists = users.find(
     u => u.enrollment == enrollment || u.mobile == mobile || u.email == email
@@ -97,7 +97,7 @@ app.post("/submit", upload.single("photo"), (req, res) => {
   });
 });
 
-// 📊 Excel
+// excel
 app.get("/export", (req, res) => {
   const ws = XLSX.utils.json_to_sheet(users);
   const wb = XLSX.utils.book_new();
@@ -105,9 +105,9 @@ app.get("/export", (req, res) => {
 
   XLSX.writeFile(wb, "students.xlsx");
 
-  res.send("Excel Downloaded");
+  res.send("Excel Done");
 });
 
-// ✅ PORT FIX (Render ke liye)
+// PORT FIX
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Server running on " + PORT));
