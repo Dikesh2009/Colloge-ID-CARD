@@ -7,11 +7,16 @@ const QRCode = require("qrcode");
 
 const app = express();
 
-// ✅ IMPORTANT MIDDLEWARE
+// ✅ middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));  // 👈 YE ADD KIYA HAI
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+// ✅ IMPORTANT ROOT FIX
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 let users = [];
 let otpStore = {};
@@ -35,13 +40,13 @@ app.post("/send-otp", async (req, res) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "governmentpolytechnic2025@gmail.com",
-      pass: "lyjk sgfe mqrk mmjn" // 👈 yaha apna app password daal
+      user: process.env.EMAIL,
+      pass: process.env.PASS
     }
   });
 
   await transporter.sendMail({
-    from: "governmentpolytechnic2025@gmail.com",
+    from: process.env.EMAIL,
     to: email,
     subject: "OTP Verification",
     text: `Your OTP is ${otp}`
@@ -61,7 +66,7 @@ app.post("/verify-otp", (req, res) => {
   }
 });
 
-// 🚫 DUPLICATE + SAVE + QR
+// 🚫 SAVE + QR
 app.post("/submit", upload.single("photo"), (req, res) => {
   const { enrollment, mobile, email, name, address } = req.body;
 
@@ -92,7 +97,7 @@ app.post("/submit", upload.single("photo"), (req, res) => {
   });
 });
 
-// 📊 EXPORT EXCEL
+// 📊 Excel
 app.get("/export", (req, res) => {
   const ws = XLSX.utils.json_to_sheet(users);
   const wb = XLSX.utils.book_new();
@@ -103,5 +108,6 @@ app.get("/export", (req, res) => {
   res.send("Excel Downloaded");
 });
 
+// ✅ PORT FIX (Render ke liye)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Server running on " + PORT));
