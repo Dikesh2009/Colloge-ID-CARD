@@ -1,6 +1,6 @@
 let verified = false;
 
-// 📩 SEND OTP
+// OTP SEND
 async function sendOTP() {
   const email = document.getElementById("email").value;
 
@@ -13,7 +13,7 @@ async function sendOTP() {
   alert("OTP Sent");
 }
 
-// ✅ VERIFY OTP
+// OTP VERIFY
 async function verifyOTP() {
   const email = document.getElementById("email").value;
   const otp = document.getElementById("otp").value;
@@ -34,7 +34,7 @@ async function verifyOTP() {
   }
 }
 
-// 🪪 SUBMIT + SHOW ID
+// FORM SUBMIT
 document.getElementById("form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -58,9 +58,9 @@ document.getElementById("form").addEventListener("submit", async (e) => {
       <div style="border:2px solid black; padding:10px;">
         <h3>${data.data.name}</h3>
         <img src="/uploads/${data.data.photo}" width="100"/>
-        <p>Enrollment: ${data.data.enrollment}</p>
-        <p>Mobile: ${data.data.mobile}</p>
-        <p>Address: ${data.data.address}</p>
+        <p>${data.data.enrollment}</p>
+        <p>${data.data.mobile}</p>
+        <p>${data.data.address}</p>
         <img src="${data.data.qr}" width="100"/>
       </div>
     `;
