@@ -6,8 +6,11 @@ const cors = require("cors");
 const QRCode = require("qrcode");
 
 const app = express();
+
+// ✅ IMPORTANT MIDDLEWARE
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));  // 👈 YE ADD KIYA HAI
 app.use(express.static("public"));
 
 let users = [];
