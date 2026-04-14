@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const XLSX = require("xlsx");
@@ -11,11 +12,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public"));
 
-// ✅ ROOT FIX (IMPORTANT)
+// ✅ FIXED STATIC PATH
+app.use(express.static(path.join(__dirname, "public")));
+
+// ✅ ROOT FIX
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 let users = [];
@@ -23,7 +26,7 @@ let otpStore = {};
 
 // upload
 const storage = multer.diskStorage({
-  destination: "./public/uploads",
+  destination: path.join(__dirname, "public/uploads"),
   filename: (req, file, cb) => {
     cb(null, Date.now() + ".jpg");
   }
@@ -108,6 +111,6 @@ app.get("/export", (req, res) => {
   res.send("Excel Done");
 });
 
-// PORT FIX
+// PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log("Server running on " + PORT));
