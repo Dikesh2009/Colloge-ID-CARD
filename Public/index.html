@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ID Card</title>
+</head>
+<body>
+
+<h2>College ID Generator</h2>
+
+<input id="email" placeholder="Email"><br><br>
+<button onclick="sendOTP()">Send OTP</button>
+
+<input id="otp" placeholder="OTP"><br><br>
+<button onclick="verifyOTP()">Verify OTP</button>
+
+<form id="form">
+  <input name="name" placeholder="Name"><br>
+  <input name="enrollment" placeholder="Enrollment"><br>
+  <input name="mobile" placeholder="Mobile"><br>
+  <input name="address" placeholder="Address"><br>
+  <input type="file" name="photo"><br>
+  <button type="submit">Generate ID</button>
+</form>
+
+<div id="card"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
